@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.loveback.crm.dao.RecordsDao">
+
+    <resultMap type="cn.com.loveback.crm.entity.Records" id="RecordsMap">
+        <result property="recordsId" column="records_id" jdbcType="INTEGER"/>
+        <result property="operatorId" column="operator_id" jdbcType="INTEGER"/>
+        <result property="mainObjectClass" column="main_object_class" jdbcType="VARCHAR"/>
+        <result property="secondaryObjectClass" column="secondary_object_class" jdbcType="VARCHAR"/>
+        <result property="mainId" column="main_id" jdbcType="INTEGER"/>
+        <result property="secondaryId" column="secondary_id" jdbcType="INTEGER"/>
+        <result property="operateTime" column="operate_time" jdbcType="TIMESTAMP"/>
+        <result property="operateContent" column="operate_content" jdbcType="VARCHAR"/>
+        <result property="operateClass" column="operate_class" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="RecordsMap">
+        select
+          records_id, operator_id, main_object_class, secondary_object_class, main_id, secondary_id, operate_time, operate_content, operate_class
+        from records
+        where records_id = #{recordsId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="RecordsMap">
+        select
+          records_id, operator_id, main_object_class, secondary_object_class, main_id, secondary_id, operate_time, operate_content, operate_class
+        from records
+        <where>
+            <if test="recordsId != null">
+                and records_id = #{recordsId}
+            </if>
+            <if test="operatorId != null">
+                and operator_id = #{operatorId}
+            </if>
+            <if test="mainObjectClass != null and mainObjectClass != ''">
+                and main_object_class = #{mainObjectClass}
+            </if>
+            <if test="secondaryObjectClass != null and secondaryObjectClass != ''">
+                and secondary_object_class = #{secondaryObjectClass}
+            </if>
+            <if test="mainId != null">
+                and main_id = #{mainId}
+            </if>
+            <if test="secondaryId != null">
+                and secondary_id = #{secondaryId}
+            </if>
+            <if test="operateTime != null">
+                and operate_time = #{operateTime}
+            </if>
+            <if test="operateContent != null and operateContent != ''">
+                and operate_content = #{operateContent}
+            </if>
+            <if test="operateClass != null and operateClass != ''">
+                and operate_class = #{operateClass}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from records
+        <where>
+            <if test="recordsId != null">
+                and records_id = #{recordsId}
+            </if>
+            <if test="operatorId != null">
+                and operator_id = #{operatorId}
+            </if>
+            <if test="mainObjectClass != null and mainObjectClass != ''">
+                and main_object_class = #{mainObjectClass}
+            </if>
+            <if test="secondaryObjectClass != null and secondaryObjectClass != ''">
+                and secondary_object_class = #{secondaryObjectClass}
+            </if>
+            <if test="mainId != null">
+                and main_id = #{mainId}
+            </if>
+            <if test="secondaryId != null">
+                and secondary_id = #{secondaryId}
+            </if>
+            <if test="operateTime != null">
+                and operate_time = #{operateTime}
+            </if>
+            <if test="operateContent != null and operateContent != ''">
+                and operate_content = #{operateContent}
+            </if>
+            <if test="operateClass != null and operateClass != ''">
+                and operate_class = #{operateClass}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="recordsId" useGeneratedKeys="true">
+        insert into records(operator_id, main_object_class, secondary_object_class, main_id, secondary_id, operate_time, operate_content, operate_class)
+        values (#{operatorId}, #{mainObjectClass}, #{secondaryObjectClass}, #{mainId}, #{secondaryId}, #{operateTime}, #{operateContent}, #{operateClass})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="recordsId" useGeneratedKeys="true">
+        insert into records(operator_id, main_object_class, secondary_object_class, main_id, secondary_id, operate_time, operate_content, operate_class)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.operatorId}, #{entity.mainObjectClass}, #{entity.secondaryObjectClass}, #{entity.mainId}, #{entity.secondaryId}, #{entity.operateTime}, #{entity.operateContent}, #{entity.operateClass})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="recordsId" useGeneratedKeys="true">
+        insert into records(operator_id, main_object_class, secondary_object_class, main_id, secondary_id, operate_time, operate_content, operate_class)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.operatorId}, #{entity.mainObjectClass}, #{entity.secondaryObjectClass}, #{entity.mainId}, #{entity.secondaryId}, #{entity.operateTime}, #{entity.operateContent}, #{entity.operateClass})
+        </foreach>
+        on duplicate key update
+        operator_id = values(operator_id),
+        main_object_class = values(main_object_class),
+        secondary_object_class = values(secondary_object_class),
+        main_id = values(main_id),
+        secondary_id = values(secondary_id),
+        operate_time = values(operate_time),
+        operate_content = values(operate_content),
+        operate_class = values(operate_class)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update records
+        <set>
+            <if test="operatorId != null">
+                operator_id = #{operatorId},
+            </if>
+            <if test="mainObjectClass != null and mainObjectClass != ''">
+                main_object_class = #{mainObjectClass},
+            </if>
+            <if test="secondaryObjectClass != null and secondaryObjectClass != ''">
+                secondary_object_class = #{secondaryObjectClass},
+            </if>
+            <if test="mainId != null">
+                main_id = #{mainId},
+            </if>
+            <if test="secondaryId != null">
+                secondary_id = #{secondaryId},
+            </if>
+            <if test="operateTime != null">
+                operate_time = #{operateTime},
+            </if>
+            <if test="operateContent != null and operateContent != ''">
+                operate_content = #{operateContent},
+            </if>
+            <if test="operateClass != null and operateClass != ''">
+                operate_class = #{operateClass},
+            </if>
+        </set>
+        where records_id = #{recordsId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from records where records_id = #{recordsId}
+    </delete>
+
+</mapper>
+

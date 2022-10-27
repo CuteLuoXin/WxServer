@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.loveback.crm.dao.BusinessDao">
+
+    <resultMap type="cn.com.loveback.crm.entity.Business" id="BusinessMap">
+        <result property="businessId" column="business_id" jdbcType="INTEGER"/>
+        <result property="businessName" column="business_name" jdbcType="VARCHAR"/>
+        <result property="clientId" column="client_id" jdbcType="INTEGER"/>
+        <result property="businessIntendedProducts" column="business_intended_products" jdbcType="VARCHAR"/>
+        <result property="businessNumber" column="business_number" jdbcType="INTEGER"/>
+        <result property="businessImportance" column="business_importance" jdbcType="VARCHAR"/>
+        <result property="businessEstimatedAmount" column="business_estimated_amount" jdbcType="VARCHAR"/>
+        <result property="businessStartTime" column="business_start_time" jdbcType="TIMESTAMP"/>
+        <result property="businessEndTime" column="business_end_time" jdbcType="TIMESTAMP"/>
+        <result property="businessForecastEndTime" column="business_forecast_end_time" jdbcType="TIMESTAMP"/>
+        <result property="businessRiskLevel" column="business_risk_level" jdbcType="VARCHAR"/>
+        <result property="businessSalesWay" column="business_sales_way" jdbcType="VARCHAR"/>
+        <result property="businessPurchaseWay" column="business_purchase_way" jdbcType="VARCHAR"/>
+        <result property="businessCompetitors" column="business_competitors" jdbcType="VARCHAR"/>
+        <result property="businessMainStaff" column="business_main_staff" jdbcType="VARCHAR"/>
+        <result property="businessStaffs" column="business_staffs" jdbcType="VARCHAR"/>
+        <result property="businessFollowRecords" column="business_follow_records" jdbcType="VARCHAR"/>
+        <result property="businessNote" column="business_note" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BusinessMap">
+        select
+          business_id, business_name, client_id, business_intended_products, business_number, business_importance, business_estimated_amount, business_start_time, business_end_time, business_forecast_end_time, business_risk_level, business_sales_way, business_purchase_way, business_competitors, business_main_staff, business_staffs, business_follow_records, business_note
+        from business
+        where business_id = #{businessId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BusinessMap">
+        select
+          business_id, business_name, client_id, business_intended_products, business_number, business_importance, business_estimated_amount, business_start_time, business_end_time, business_forecast_end_time, business_risk_level, business_sales_way, business_purchase_way, business_competitors, business_main_staff, business_staffs, business_follow_records, business_note
+        from business
+        <where>
+            <if test="businessId != null">
+                and business_id = #{businessId}
+            </if>
+            <if test="businessName != null and businessName != ''">
+                and business_name = #{businessName}
+            </if>
+            <if test="clientId != null">
+                and client_id = #{clientId}
+            </if>
+            <if test="businessIntendedProducts != null and businessIntendedProducts != ''">
+                and business_intended_products = #{businessIntendedProducts}
+            </if>
+            <if test="businessNumber != null">
+                and business_number = #{businessNumber}
+            </if>
+            <if test="businessImportance != null and businessImportance != ''">
+                and business_importance = #{businessImportance}
+            </if>
+            <if test="businessEstimatedAmount != null and businessEstimatedAmount != ''">
+                and business_estimated_amount = #{businessEstimatedAmount}
+            </if>
+            <if test="businessStartTime != null">
+                and business_start_time = #{businessStartTime}
+            </if>
+            <if test="businessEndTime != null">
+                and business_end_time = #{businessEndTime}
+            </if>
+            <if test="businessForecastEndTime != null">
+                and business_forecast_end_time = #{businessForecastEndTime}
+            </if>
+            <if test="businessRiskLevel != null and businessRiskLevel != ''">
+                and business_risk_level = #{businessRiskLevel}
+            </if>
+            <if test="businessSalesWay != null and businessSalesWay != ''">
+                and business_sales_way = #{businessSalesWay}
+            </if>
+            <if test="businessPurchaseWay != null and businessPurchaseWay != ''">
+                and business_purchase_way = #{businessPurchaseWay}
+            </if>
+            <if test="businessCompetitors != null and businessCompetitors != ''">
+                and business_competitors = #{businessCompetitors}
+            </if>
+            <if test="businessMainStaff != null and businessMainStaff != ''">
+                and business_main_staff = #{businessMainStaff}
+            </if>
+            <if test="businessStaffs != null and businessStaffs != ''">
+                and business_staffs = #{businessStaffs}
+            </if>
+            <if test="businessFollowRecords != null and businessFollowRecords != ''">
+                and business_follow_records = #{businessFollowRecords}
+            </if>
+            <if test="businessNote != null and businessNote != ''">
+                and business_note = #{businessNote}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from business
+        <where>
+            <if test="businessId != null">
+                and business_id = #{businessId}
+            </if>
+            <if test="businessName != null and businessName != ''">
+                and business_name = #{businessName}
+            </if>
+            <if test="clientId != null">
+                and client_id = #{clientId}
+            </if>
+            <if test="businessIntendedProducts != null and businessIntendedProducts != ''">
+                and business_intended_products = #{businessIntendedProducts}
+            </if>
+            <if test="businessNumber != null">
+                and business_number = #{businessNumber}
+            </if>
+            <if test="businessImportance != null and businessImportance != ''">
+                and business_importance = #{businessImportance}
+            </if>
+            <if test="businessEstimatedAmount != null and businessEstimatedAmount != ''">
+                and business_estimated_amount = #{businessEstimatedAmount}
+            </if>
+            <if test="businessStartTime != null">
+                and business_start_time = #{businessStartTime}
+            </if>
+            <if test="businessEndTime != null">
+                and business_end_time = #{businessEndTime}
+            </if>
+            <if test="businessForecastEndTime != null">
+                and business_forecast_end_time = #{businessForecastEndTime}
+            </if>
+            <if test="businessRiskLevel != null and businessRiskLevel != ''">
+                and business_risk_level = #{businessRiskLevel}
+            </if>
+            <if test="businessSalesWay != null and businessSalesWay != ''">
+                and business_sales_way = #{businessSalesWay}
+            </if>
+            <if test="businessPurchaseWay != null and businessPurchaseWay != ''">
+                and business_purchase_way = #{businessPurchaseWay}
+            </if>
+            <if test="businessCompetitors != null and businessCompetitors != ''">
+                and business_competitors = #{businessCompetitors}
+            </if>
+            <if test="businessMainStaff != null and businessMainStaff != ''">
+                and business_main_staff = #{businessMainStaff}
+            </if>
+            <if test="businessStaffs != null and businessStaffs != ''">
+                and business_staffs = #{businessStaffs}
+            </if>
+            <if test="businessFollowRecords != null and businessFollowRecords != ''">
+                and business_follow_records = #{businessFollowRecords}
+            </if>
+            <if test="businessNote != null and businessNote != ''">
+                and business_note = #{businessNote}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="businessId" useGeneratedKeys="true">
+        insert into business(business_name, client_id, business_intended_products, business_number, business_importance, business_estimated_amount, business_start_time, business_end_time, business_forecast_end_time, business_risk_level, business_sales_way, business_purchase_way, business_competitors, business_main_staff, business_staffs, business_follow_records, business_note)
+        values (#{businessName}, #{clientId}, #{businessIntendedProducts}, #{businessNumber}, #{businessImportance}, #{businessEstimatedAmount}, #{businessStartTime}, #{businessEndTime}, #{businessForecastEndTime}, #{businessRiskLevel}, #{businessSalesWay}, #{businessPurchaseWay}, #{businessCompetitors}, #{businessMainStaff}, #{businessStaffs}, #{businessFollowRecords}, #{businessNote})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="businessId" useGeneratedKeys="true">
+        insert into business(business_name, client_id, business_intended_products, business_number, business_importance, business_estimated_amount, business_start_time, business_end_time, business_forecast_end_time, business_risk_level, business_sales_way, business_purchase_way, business_competitors, business_main_staff, business_staffs, business_follow_records, business_note)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.businessName}, #{entity.clientId}, #{entity.businessIntendedProducts}, #{entity.businessNumber}, #{entity.businessImportance}, #{entity.businessEstimatedAmount}, #{entity.businessStartTime}, #{entity.businessEndTime}, #{entity.businessForecastEndTime}, #{entity.businessRiskLevel}, #{entity.businessSalesWay}, #{entity.businessPurchaseWay}, #{entity.businessCompetitors}, #{entity.businessMainStaff}, #{entity.businessStaffs}, #{entity.businessFollowRecords}, #{entity.businessNote})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="businessId" useGeneratedKeys="true">
+        insert into business(business_name, client_id, business_intended_products, business_number, business_importance, business_estimated_amount, business_start_time, business_end_time, business_forecast_end_time, business_risk_level, business_sales_way, business_purchase_way, business_competitors, business_main_staff, business_staffs, business_follow_records, business_note)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.businessName}, #{entity.clientId}, #{entity.businessIntendedProducts}, #{entity.businessNumber}, #{entity.businessImportance}, #{entity.businessEstimatedAmount}, #{entity.businessStartTime}, #{entity.businessEndTime}, #{entity.businessForecastEndTime}, #{entity.businessRiskLevel}, #{entity.businessSalesWay}, #{entity.businessPurchaseWay}, #{entity.businessCompetitors}, #{entity.businessMainStaff}, #{entity.businessStaffs}, #{entity.businessFollowRecords}, #{entity.businessNote})
+        </foreach>
+        on duplicate key update
+        business_name = values(business_name),
+        client_id = values(client_id),
+        business_intended_products = values(business_intended_products),
+        business_number = values(business_number),
+        business_importance = values(business_importance),
+        business_estimated_amount = values(business_estimated_amount),
+        business_start_time = values(business_start_time),
+        business_end_time = values(business_end_time),
+        business_forecast_end_time = values(business_forecast_end_time),
+        business_risk_level = values(business_risk_level),
+        business_sales_way = values(business_sales_way),
+        business_purchase_way = values(business_purchase_way),
+        business_competitors = values(business_competitors),
+        business_main_staff = values(business_main_staff),
+        business_staffs = values(business_staffs),
+        business_follow_records = values(business_follow_records),
+        business_note = values(business_note)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update business
+        <set>
+            <if test="businessName != null and businessName != ''">
+                business_name = #{businessName},
+            </if>
+            <if test="clientId != null">
+                client_id = #{clientId},
+            </if>
+            <if test="businessIntendedProducts != null and businessIntendedProducts != ''">
+                business_intended_products = #{businessIntendedProducts},
+            </if>
+            <if test="businessNumber != null">
+                business_number = #{businessNumber},
+            </if>
+            <if test="businessImportance != null and businessImportance != ''">
+                business_importance = #{businessImportance},
+            </if>
+            <if test="businessEstimatedAmount != null and businessEstimatedAmount != ''">
+                business_estimated_amount = #{businessEstimatedAmount},
+            </if>
+            <if test="businessStartTime != null">
+                business_start_time = #{businessStartTime},
+            </if>
+            <if test="businessEndTime != null">
+                business_end_time = #{businessEndTime},
+            </if>
+            <if test="businessForecastEndTime != null">
+                business_forecast_end_time = #{businessForecastEndTime},
+            </if>
+            <if test="businessRiskLevel != null and businessRiskLevel != ''">
+                business_risk_level = #{businessRiskLevel},
+            </if>
+            <if test="businessSalesWay != null and businessSalesWay != ''">
+                business_sales_way = #{businessSalesWay},
+            </if>
+            <if test="businessPurchaseWay != null and businessPurchaseWay != ''">
+                business_purchase_way = #{businessPurchaseWay},
+            </if>
+            <if test="businessCompetitors != null and businessCompetitors != ''">
+                business_competitors = #{businessCompetitors},
+            </if>
+            <if test="businessMainStaff != null and businessMainStaff != ''">
+                business_main_staff = #{businessMainStaff},
+            </if>
+            <if test="businessStaffs != null and businessStaffs != ''">
+                business_staffs = #{businessStaffs},
+            </if>
+            <if test="businessFollowRecords != null and businessFollowRecords != ''">
+                business_follow_records = #{businessFollowRecords},
+            </if>
+            <if test="businessNote != null and businessNote != ''">
+                business_note = #{businessNote},
+            </if>
+        </set>
+        where business_id = #{businessId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from business where business_id = #{businessId}
+    </delete>
+
+</mapper>
+

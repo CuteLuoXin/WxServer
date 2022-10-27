@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.loveback.crm.dao.CompanyDao">
+
+    <resultMap type="cn.com.loveback.crm.entity.Company" id="CompanyMap">
+        <result property="companyId" column="company_id" jdbcType="INTEGER"/>
+        <result property="companyName" column="company_name" jdbcType="VARCHAR"/>
+        <result property="companyLegalRepresentative" column="company_legal_representative" jdbcType="VARCHAR"/>
+        <result property="companyRegistrationTime" column="company_registration_time" jdbcType="TIMESTAMP"/>
+        <result property="companySecret" column="company_secret" jdbcType="VARCHAR"/>
+        <result property="companyIndustry" column="company_industry" jdbcType="VARCHAR"/>
+        <result property="companyPersonNumber" column="company_person_number" jdbcType="INTEGER"/>
+        <result property="companyProducts" column="company_products" jdbcType="VARCHAR"/>
+        <result property="companyAdministrator" column="company_administrator" jdbcType="VARCHAR"/>
+        <result property="companyType" column="company_type" jdbcType="VARCHAR"/>
+        <result property="companyIntroduction" column="company_introduction" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="CompanyMap">
+        select
+          company_id, company_name, company_legal_representative, company_registration_time, company_secret, company_industry, company_person_number, company_products, company_administrator, company_type, company_introduction
+        from company
+        where company_id = #{companyId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="CompanyMap">
+        select
+          company_id, company_name, company_legal_representative, company_registration_time, company_secret, company_industry, company_person_number, company_products, company_administrator, company_type, company_introduction
+        from company
+        <where>
+            <if test="companyId != null">
+                and company_id = #{companyId}
+            </if>
+            <if test="companyName != null and companyName != ''">
+                and company_name = #{companyName}
+            </if>
+            <if test="companyLegalRepresentative != null and companyLegalRepresentative != ''">
+                and company_legal_representative = #{companyLegalRepresentative}
+            </if>
+            <if test="companyRegistrationTime != null">
+                and company_registration_time = #{companyRegistrationTime}
+            </if>
+            <if test="companySecret != null and companySecret != ''">
+                and company_secret = #{companySecret}
+            </if>
+            <if test="companyIndustry != null and companyIndustry != ''">
+                and company_industry = #{companyIndustry}
+            </if>
+            <if test="companyPersonNumber != null">
+                and company_person_number = #{companyPersonNumber}
+            </if>
+            <if test="companyProducts != null and companyProducts != ''">
+                and company_products = #{companyProducts}
+            </if>
+            <if test="companyAdministrator != null and companyAdministrator != ''">
+                and company_administrator = #{companyAdministrator}
+            </if>
+            <if test="companyType != null and companyType != ''">
+                and company_type = #{companyType}
+            </if>
+            <if test="companyIntroduction != null and companyIntroduction != ''">
+                and company_introduction = #{companyIntroduction}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from company
+        <where>
+            <if test="companyId != null">
+                and company_id = #{companyId}
+            </if>
+            <if test="companyName != null and companyName != ''">
+                and company_name = #{companyName}
+            </if>
+            <if test="companyLegalRepresentative != null and companyLegalRepresentative != ''">
+                and company_legal_representative = #{companyLegalRepresentative}
+            </if>
+            <if test="companyRegistrationTime != null">
+                and company_registration_time = #{companyRegistrationTime}
+            </if>
+            <if test="companySecret != null and companySecret != ''">
+                and company_secret = #{companySecret}
+            </if>
+            <if test="companyIndustry != null and companyIndustry != ''">
+                and company_industry = #{companyIndustry}
+            </if>
+            <if test="companyPersonNumber != null">
+                and company_person_number = #{companyPersonNumber}
+            </if>
+            <if test="companyProducts != null and companyProducts != ''">
+                and company_products = #{companyProducts}
+            </if>
+            <if test="companyAdministrator != null and companyAdministrator != ''">
+                and company_administrator = #{companyAdministrator}
+            </if>
+            <if test="companyType != null and companyType != ''">
+                and company_type = #{companyType}
+            </if>
+            <if test="companyIntroduction != null and companyIntroduction != ''">
+                and company_introduction = #{companyIntroduction}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="companyId" useGeneratedKeys="true">
+        insert into company(company_name, company_legal_representative, company_registration_time, company_secret, company_industry, company_person_number, company_products, company_administrator, company_type, company_introduction)
+        values (#{companyName}, #{companyLegalRepresentative}, #{companyRegistrationTime}, #{companySecret}, #{companyIndustry}, #{companyPersonNumber}, #{companyProducts}, #{companyAdministrator}, #{companyType}, #{companyIntroduction})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="companyId" useGeneratedKeys="true">
+        insert into company(company_name, company_legal_representative, company_registration_time, company_secret, company_industry, company_person_number, company_products, company_administrator, company_type, company_introduction)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.companyName}, #{entity.companyLegalRepresentative}, #{entity.companyRegistrationTime}, #{entity.companySecret}, #{entity.companyIndustry}, #{entity.companyPersonNumber}, #{entity.companyProducts}, #{entity.companyAdministrator}, #{entity.companyType}, #{entity.companyIntroduction})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="companyId" useGeneratedKeys="true">
+        insert into company(company_name, company_legal_representative, company_registration_time, company_secret, company_industry, company_person_number, company_products, company_administrator, company_type, company_introduction)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.companyName}, #{entity.companyLegalRepresentative}, #{entity.companyRegistrationTime}, #{entity.companySecret}, #{entity.companyIndustry}, #{entity.companyPersonNumber}, #{entity.companyProducts}, #{entity.companyAdministrator}, #{entity.companyType}, #{entity.companyIntroduction})
+        </foreach>
+        on duplicate key update
+        company_name = values(company_name),
+        company_legal_representative = values(company_legal_representative),
+        company_registration_time = values(company_registration_time),
+        company_secret = values(company_secret),
+        company_industry = values(company_industry),
+        company_person_number = values(company_person_number),
+        company_products = values(company_products),
+        company_administrator = values(company_administrator),
+        company_type = values(company_type),
+        company_introduction = values(company_introduction)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update company
+        <set>
+            <if test="companyName != null and companyName != ''">
+                company_name = #{companyName},
+            </if>
+            <if test="companyLegalRepresentative != null and companyLegalRepresentative != ''">
+                company_legal_representative = #{companyLegalRepresentative},
+            </if>
+            <if test="companyRegistrationTime != null">
+                company_registration_time = #{companyRegistrationTime},
+            </if>
+            <if test="companySecret != null and companySecret != ''">
+                company_secret = #{companySecret},
+            </if>
+            <if test="companyIndustry != null and companyIndustry != ''">
+                company_industry = #{companyIndustry},
+            </if>
+            <if test="companyPersonNumber != null">
+                company_person_number = #{companyPersonNumber},
+            </if>
+            <if test="companyProducts != null and companyProducts != ''">
+                company_products = #{companyProducts},
+            </if>
+            <if test="companyAdministrator != null and companyAdministrator != ''">
+                company_administrator = #{companyAdministrator},
+            </if>
+            <if test="companyType != null and companyType != ''">
+                company_type = #{companyType},
+            </if>
+            <if test="companyIntroduction != null and companyIntroduction != ''">
+                company_introduction = #{companyIntroduction},
+            </if>
+        </set>
+        where company_id = #{companyId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from company where company_id = #{companyId}
+    </delete>
+
+</mapper>
+

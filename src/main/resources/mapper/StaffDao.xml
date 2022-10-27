@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.loveback.crm.dao.StaffDao">
+
+    <resultMap type="cn.com.loveback.crm.entity.Staff" id="StaffMap">
+        <result property="staffId" column="staff_id" jdbcType="INTEGER"/>
+        <result property="staffName" column="staff_name" jdbcType="VARCHAR"/>
+        <result property="staffSex" column="staff_sex" jdbcType="VARCHAR"/>
+        <result property="staffPosts" column="staff_posts" jdbcType="VARCHAR"/>
+        <result property="staffGrade" column="staff_grade" jdbcType="VARCHAR"/>
+        <result property="staffCompany" column="staff_company" jdbcType="VARCHAR"/>
+        <result property="staffDepartment" column="staff_department" jdbcType="VARCHAR"/>
+        <result property="staffClient" column="staff_client" jdbcType="VARCHAR"/>
+        <result property="staffWorktable" column="staff_worktable" jdbcType="VARCHAR"/>
+        <result property="staffNowWork" column="staff_now_work" jdbcType="TIMESTAMP"/>
+        <result property="staffTimeoutWork" column="staff_timeout_work" jdbcType="TIMESTAMP"/>
+        <result property="staffExpectedWork" column="staff_expected_work" jdbcType="TIMESTAMP"/>
+        <result property="staffState" column="staff_state" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="StaffMap">
+        select
+          staff_id, staff_name, staff_sex, staff_posts, staff_grade, staff_company, staff_department, staff_client, staff_worktable, staff_now_work, staff_timeout_work, staff_expected_work, staff_state
+        from staff
+        where staff_id = #{staffId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="StaffMap">
+        select
+          staff_id, staff_name, staff_sex, staff_posts, staff_grade, staff_company, staff_department, staff_client, staff_worktable, staff_now_work, staff_timeout_work, staff_expected_work, staff_state
+        from staff
+        <where>
+            <if test="staffId != null">
+                and staff_id = #{staffId}
+            </if>
+            <if test="staffName != null and staffName != ''">
+                and staff_name = #{staffName}
+            </if>
+            <if test="staffSex != null and staffSex != ''">
+                and staff_sex = #{staffSex}
+            </if>
+            <if test="staffPosts != null and staffPosts != ''">
+                and staff_posts = #{staffPosts}
+            </if>
+            <if test="staffGrade != null and staffGrade != ''">
+                and staff_grade = #{staffGrade}
+            </if>
+            <if test="staffCompany != null and staffCompany != ''">
+                and staff_company = #{staffCompany}
+            </if>
+            <if test="staffDepartment != null and staffDepartment != ''">
+                and staff_department = #{staffDepartment}
+            </if>
+            <if test="staffClient != null and staffClient != ''">
+                and staff_client = #{staffClient}
+            </if>
+            <if test="staffWorktable != null and staffWorktable != ''">
+                and staff_worktable = #{staffWorktable}
+            </if>
+            <if test="staffNowWork != null">
+                and staff_now_work = #{staffNowWork}
+            </if>
+            <if test="staffTimeoutWork != null">
+                and staff_timeout_work = #{staffTimeoutWork}
+            </if>
+            <if test="staffExpectedWork != null">
+                and staff_expected_work = #{staffExpectedWork}
+            </if>
+            <if test="staffState != null and staffState != ''">
+                and staff_state = #{staffState}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from staff
+        <where>
+            <if test="staffId != null">
+                and staff_id = #{staffId}
+            </if>
+            <if test="staffName != null and staffName != ''">
+                and staff_name = #{staffName}
+            </if>
+            <if test="staffSex != null and staffSex != ''">
+                and staff_sex = #{staffSex}
+            </if>
+            <if test="staffPosts != null and staffPosts != ''">
+                and staff_posts = #{staffPosts}
+            </if>
+            <if test="staffGrade != null and staffGrade != ''">
+                and staff_grade = #{staffGrade}
+            </if>
+            <if test="staffCompany != null and staffCompany != ''">
+                and staff_company = #{staffCompany}
+            </if>
+            <if test="staffDepartment != null and staffDepartment != ''">
+                and staff_department = #{staffDepartment}
+            </if>
+            <if test="staffClient != null and staffClient != ''">
+                and staff_client = #{staffClient}
+            </if>
+            <if test="staffWorktable != null and staffWorktable != ''">
+                and staff_worktable = #{staffWorktable}
+            </if>
+            <if test="staffNowWork != null">
+                and staff_now_work = #{staffNowWork}
+            </if>
+            <if test="staffTimeoutWork != null">
+                and staff_timeout_work = #{staffTimeoutWork}
+            </if>
+            <if test="staffExpectedWork != null">
+                and staff_expected_work = #{staffExpectedWork}
+            </if>
+            <if test="staffState != null and staffState != ''">
+                and staff_state = #{staffState}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="staffId" useGeneratedKeys="true">
+        insert into staff(staff_name, staff_sex, staff_posts, staff_grade, staff_company, staff_department, staff_client, staff_worktable, staff_now_work, staff_timeout_work, staff_expected_work, staff_state)
+        values (#{staffName}, #{staffSex}, #{staffPosts}, #{staffGrade}, #{staffCompany}, #{staffDepartment}, #{staffClient}, #{staffWorktable}, #{staffNowWork}, #{staffTimeoutWork}, #{staffExpectedWork}, #{staffState})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="staffId" useGeneratedKeys="true">
+        insert into staff(staff_name, staff_sex, staff_posts, staff_grade, staff_company, staff_department, staff_client, staff_worktable, staff_now_work, staff_timeout_work, staff_expected_work, staff_state)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.staffName}, #{entity.staffSex}, #{entity.staffPosts}, #{entity.staffGrade}, #{entity.staffCompany}, #{entity.staffDepartment}, #{entity.staffClient}, #{entity.staffWorktable}, #{entity.staffNowWork}, #{entity.staffTimeoutWork}, #{entity.staffExpectedWork}, #{entity.staffState})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="staffId" useGeneratedKeys="true">
+        insert into staff(staff_name, staff_sex, staff_posts, staff_grade, staff_company, staff_department, staff_client, staff_worktable, staff_now_work, staff_timeout_work, staff_expected_work, staff_state)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.staffName}, #{entity.staffSex}, #{entity.staffPosts}, #{entity.staffGrade}, #{entity.staffCompany}, #{entity.staffDepartment}, #{entity.staffClient}, #{entity.staffWorktable}, #{entity.staffNowWork}, #{entity.staffTimeoutWork}, #{entity.staffExpectedWork}, #{entity.staffState})
+        </foreach>
+        on duplicate key update
+        staff_name = values(staff_name),
+        staff_sex = values(staff_sex),
+        staff_posts = values(staff_posts),
+        staff_grade = values(staff_grade),
+        staff_company = values(staff_company),
+        staff_department = values(staff_department),
+        staff_client = values(staff_client),
+        staff_worktable = values(staff_worktable),
+        staff_now_work = values(staff_now_work),
+        staff_timeout_work = values(staff_timeout_work),
+        staff_expected_work = values(staff_expected_work),
+        staff_state = values(staff_state)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update staff
+        <set>
+            <if test="staffName != null and staffName != ''">
+                staff_name = #{staffName},
+            </if>
+            <if test="staffSex != null and staffSex != ''">
+                staff_sex = #{staffSex},
+            </if>
+            <if test="staffPosts != null and staffPosts != ''">
+                staff_posts = #{staffPosts},
+            </if>
+            <if test="staffGrade != null and staffGrade != ''">
+                staff_grade = #{staffGrade},
+            </if>
+            <if test="staffCompany != null and staffCompany != ''">
+                staff_company = #{staffCompany},
+            </if>
+            <if test="staffDepartment != null and staffDepartment != ''">
+                staff_department = #{staffDepartment},
+            </if>
+            <if test="staffClient != null and staffClient != ''">
+                staff_client = #{staffClient},
+            </if>
+            <if test="staffWorktable != null and staffWorktable != ''">
+                staff_worktable = #{staffWorktable},
+            </if>
+            <if test="staffNowWork != null">
+                staff_now_work = #{staffNowWork},
+            </if>
+            <if test="staffTimeoutWork != null">
+                staff_timeout_work = #{staffTimeoutWork},
+            </if>
+            <if test="staffExpectedWork != null">
+                staff_expected_work = #{staffExpectedWork},
+            </if>
+            <if test="staffState != null and staffState != ''">
+                staff_state = #{staffState},
+            </if>
+        </set>
+        where staff_id = #{staffId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from staff where staff_id = #{staffId}
+    </delete>
+
+</mapper>
+

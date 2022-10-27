@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.loveback.crm.dao.CluesDao">
+
+    <resultMap type="cn.com.loveback.crm.entity.Clues" id="CluesMap">
+        <result property="cluesId" column="clues_id" jdbcType="VARCHAR"/>
+        <result property="cluesName" column="clues_name" jdbcType="VARCHAR"/>
+        <result property="contactName" column="contact_name" jdbcType="VARCHAR"/>
+        <result property="contactIdentityCard" column="contact_identity_card" jdbcType="VARCHAR"/>
+        <result property="contactPosts" column="contact_posts" jdbcType="VARCHAR"/>
+        <result property="contactPhone" column="contact_phone" jdbcType="VARCHAR"/>
+        <result property="contactCreateTime" column="contact_create_time" jdbcType="TIMESTAMP"/>
+        <result property="source" column="source" jdbcType="VARCHAR"/>
+        <result property="industry" column="industry" jdbcType="VARCHAR"/>
+        <result property="contactCreateStaff" column="contact_create_staff" jdbcType="VARCHAR"/>
+        <result property="contactNote" column="contact_note" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="CluesMap">
+        select
+          clues_id, clues_name, contact_name, contact_identity_card, contact_posts, contact_phone, contact_create_time, source, industry, contact_create_staff, contact_note
+        from clues
+        where clues_id = #{cluesId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="CluesMap">
+        select
+          clues_id, clues_name, contact_name, contact_identity_card, contact_posts, contact_phone, contact_create_time, source, industry, contact_create_staff, contact_note
+        from clues
+        <where>
+            <if test="cluesId != null and cluesId != ''">
+                and clues_id = #{cluesId}
+            </if>
+            <if test="cluesName != null and cluesName != ''">
+                and clues_name = #{cluesName}
+            </if>
+            <if test="contactName != null and contactName != ''">
+                and contact_name = #{contactName}
+            </if>
+            <if test="contactIdentityCard != null and contactIdentityCard != ''">
+                and contact_identity_card = #{contactIdentityCard}
+            </if>
+            <if test="contactPosts != null and contactPosts != ''">
+                and contact_posts = #{contactPosts}
+            </if>
+            <if test="contactPhone != null and contactPhone != ''">
+                and contact_phone = #{contactPhone}
+            </if>
+            <if test="contactCreateTime != null">
+                and contact_create_time = #{contactCreateTime}
+            </if>
+            <if test="source != null and source != ''">
+                and source = #{source}
+            </if>
+            <if test="industry != null and industry != ''">
+                and industry = #{industry}
+            </if>
+            <if test="contactCreateStaff != null and contactCreateStaff != ''">
+                and contact_create_staff = #{contactCreateStaff}
+            </if>
+            <if test="contactNote != null and contactNote != ''">
+                and contact_note = #{contactNote}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from clues
+        <where>
+            <if test="cluesId != null and cluesId != ''">
+                and clues_id = #{cluesId}
+            </if>
+            <if test="cluesName != null and cluesName != ''">
+                and clues_name = #{cluesName}
+            </if>
+            <if test="contactName != null and contactName != ''">
+                and contact_name = #{contactName}
+            </if>
+            <if test="contactIdentityCard != null and contactIdentityCard != ''">
+                and contact_identity_card = #{contactIdentityCard}
+            </if>
+            <if test="contactPosts != null and contactPosts != ''">
+                and contact_posts = #{contactPosts}
+            </if>
+            <if test="contactPhone != null and contactPhone != ''">
+                and contact_phone = #{contactPhone}
+            </if>
+            <if test="contactCreateTime != null">
+                and contact_create_time = #{contactCreateTime}
+            </if>
+            <if test="source != null and source != ''">
+                and source = #{source}
+            </if>
+            <if test="industry != null and industry != ''">
+                and industry = #{industry}
+            </if>
+            <if test="contactCreateStaff != null and contactCreateStaff != ''">
+                and contact_create_staff = #{contactCreateStaff}
+            </if>
+            <if test="contactNote != null and contactNote != ''">
+                and contact_note = #{contactNote}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="cluesId" useGeneratedKeys="true">
+        insert into clues(clues_name, contact_name, contact_identity_card, contact_posts, contact_phone, contact_create_time, source, industry, contact_create_staff, contact_note)
+        values (#{cluesName}, #{contactName}, #{contactIdentityCard}, #{contactPosts}, #{contactPhone}, #{contactCreateTime}, #{source}, #{industry}, #{contactCreateStaff}, #{contactNote})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="cluesId" useGeneratedKeys="true">
+        insert into clues(clues_name, contact_name, contact_identity_card, contact_posts, contact_phone, contact_create_time, source, industry, contact_create_staff, contact_note)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.cluesName}, #{entity.contactName}, #{entity.contactIdentityCard}, #{entity.contactPosts}, #{entity.contactPhone}, #{entity.contactCreateTime}, #{entity.source}, #{entity.industry}, #{entity.contactCreateStaff}, #{entity.contactNote})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="cluesId" useGeneratedKeys="true">
+        insert into clues(clues_name, contact_name, contact_identity_card, contact_posts, contact_phone, contact_create_time, source, industry, contact_create_staff, contact_note)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.cluesName}, #{entity.contactName}, #{entity.contactIdentityCard}, #{entity.contactPosts}, #{entity.contactPhone}, #{entity.contactCreateTime}, #{entity.source}, #{entity.industry}, #{entity.contactCreateStaff}, #{entity.contactNote})
+        </foreach>
+        on duplicate key update
+        clues_name = values(clues_name),
+        contact_name = values(contact_name),
+        contact_identity_card = values(contact_identity_card),
+        contact_posts = values(contact_posts),
+        contact_phone = values(contact_phone),
+        contact_create_time = values(contact_create_time),
+        source = values(source),
+        industry = values(industry),
+        contact_create_staff = values(contact_create_staff),
+        contact_note = values(contact_note)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update clues
+        <set>
+            <if test="cluesName != null and cluesName != ''">
+                clues_name = #{cluesName},
+            </if>
+            <if test="contactName != null and contactName != ''">
+                contact_name = #{contactName},
+            </if>
+            <if test="contactIdentityCard != null and contactIdentityCard != ''">
+                contact_identity_card = #{contactIdentityCard},
+            </if>
+            <if test="contactPosts != null and contactPosts != ''">
+                contact_posts = #{contactPosts},
+            </if>
+            <if test="contactPhone != null and contactPhone != ''">
+                contact_phone = #{contactPhone},
+            </if>
+            <if test="contactCreateTime != null">
+                contact_create_time = #{contactCreateTime},
+            </if>
+            <if test="source != null and source != ''">
+                source = #{source},
+            </if>
+            <if test="industry != null and industry != ''">
+                industry = #{industry},
+            </if>
+            <if test="contactCreateStaff != null and contactCreateStaff != ''">
+                contact_create_staff = #{contactCreateStaff},
+            </if>
+            <if test="contactNote != null and contactNote != ''">
+                contact_note = #{contactNote},
+            </if>
+        </set>
+        where clues_id = #{cluesId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from clues where clues_id = #{cluesId}
+    </delete>
+
+</mapper>
+

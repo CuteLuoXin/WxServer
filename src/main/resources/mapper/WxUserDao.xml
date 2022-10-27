@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.loveback.hziee.wxserver.dao.WxUserDao">
+
+    <resultMap type="cn.com.loveback.hziee.wxserver.entity.WxUser" id="WxUserMap">
+        <result property="telnum" column="telnum" jdbcType="VARCHAR"/>
+        <result property="nickname" column="nickName" jdbcType="VARCHAR"/>
+        <result property="avatarurl" column="avatarUrl" jdbcType="VARCHAR"/>
+        <result property="gender" column="gender" jdbcType="INTEGER"/>
+        <result property="country" column="country" jdbcType="VARCHAR"/>
+        <result property="province" column="province" jdbcType="VARCHAR"/>
+        <result property="city" column="city" jdbcType="VARCHAR"/>
+        <result property="language" column="language" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="WxUserMap">
+        select telnum,
+               nickName,
+               avatarUrl,
+               gender,
+               country,
+               province,
+               city, language
+        from wx_user
+        where telnum = #{telnum}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="WxUserMap">
+        select
+        telnum, nickName, avatarUrl, gender, country, province, city, language
+        from wx_user
+        <where>
+            <if test="telnum != null and telnum != ''">
+                and telnum = #{telnum}
+            </if>
+            <if test="nickname != null and nickname != ''">
+                and nickName = #{nickname}
+            </if>
+            <if test="avatarurl != null and avatarurl != ''">
+                and avatarUrl = #{avatarurl}
+            </if>
+            <if test="gender != null">
+                and gender = #{gender}
+            </if>
+            <if test="country != null and country != ''">
+                and country = #{country}
+            </if>
+            <if test="province != null and province != ''">
+                and province = #{province}
+            </if>
+            <if test="city != null and city != ''">
+                and city = #{city}
+            </if>
+            <if test="language != null and language != ''">
+                and language = #{language}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from wx_user
+        <where>
+            <if test="telnum != null and telnum != ''">
+                and telnum = #{telnum}
+            </if>
+            <if test="nickname != null and nickname != ''">
+                and nickName = #{nickname}
+            </if>
+            <if test="avatarurl != null and avatarurl != ''">
+                and avatarUrl = #{avatarurl}
+            </if>
+            <if test="gender != null">
+                and gender = #{gender}
+            </if>
+            <if test="country != null and country != ''">
+                and country = #{country}
+            </if>
+            <if test="province != null and province != ''">
+                and province = #{province}
+            </if>
+            <if test="city != null and city != ''">
+                and city = #{city}
+            </if>
+            <if test="language != null and language != ''">
+                and language = #{language}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="telnum" useGeneratedKeys="true">
+        insert into wx_user(nickName, avatarUrl, gender, country, province, city, language)
+        values (#{nickname}, #{avatarurl}, #{gender}, #{country}, #{province}, #{city}, #{language})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="telnum" useGeneratedKeys="true">
+        insert into wx_user(nickName, avatarUrl, gender, country, province, city, language)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.nickname}, #{entity.avatarurl}, #{entity.gender}, #{entity.country}, #{entity.province},
+            #{entity.city}, #{entity.language})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="telnum" useGeneratedKeys="true">
+        insert into wx_user(nickName, avatarUrl, gender, country, province, city, language)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.nickname}, #{entity.avatarurl}, #{entity.gender}, #{entity.country}, #{entity.province},
+            #{entity.city}, #{entity.language})
+        </foreach>
+        on duplicate key update
+        nickName = values(nickName),
+        avatarUrl = values(avatarUrl),
+        gender = values(gender),
+        country = values(country),
+        province = values(province),
+        city = values(city),
+        language = values(language)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update wx_user
+        <set>
+            <if test="nickname != null and nickname != ''">
+                nickName = #{nickname},
+            </if>
+            <if test="avatarurl != null and avatarurl != ''">
+                avatarUrl = #{avatarurl},
+            </if>
+            <if test="gender != null">
+                gender = #{gender},
+            </if>
+            <if test="country != null and country != ''">
+                country = #{country},
+            </if>
+            <if test="province != null and province != ''">
+                province = #{province},
+            </if>
+            <if test="city != null and city != ''">
+                city = #{city},
+            </if>
+            <if test="language != null and language != ''">
+                language = #{language},
+            </if>
+        </set>
+        where telnum = #{telnum}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from wx_user
+        where telnum = #{telnum}
+    </delete>
+
+</mapper>
+

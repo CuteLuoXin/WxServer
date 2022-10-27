@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.loveback.crm.dao.DepartmentDao">
+
+    <resultMap type="cn.com.loveback.crm.entity.Department" id="DepartmentMap">
+        <result property="companyId" column="company_id" jdbcType="VARCHAR"/>
+        <result property="departmentId" column="department_id" jdbcType="VARCHAR"/>
+        <result property="departmentName" column="department_name" jdbcType="VARCHAR"/>
+        <result property="departmentGrade" column="department_grade" jdbcType="VARCHAR"/>
+        <result property="departmentStaff" column="department_staff" jdbcType="VARCHAR"/>
+        <result property="departmentParent" column="department_parent" jdbcType="VARCHAR"/>
+        <result property="departmentNumber" column="department_number" jdbcType="INTEGER"/>
+        <result property="departmentStaffs" column="department_staffs" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="DepartmentMap">
+        select
+          company_id, department_id, department_name, department_grade, department_staff, department_parent, department_number, department_staffs
+        from department
+        where company_id = #{companyId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="DepartmentMap">
+        select
+          company_id, department_id, department_name, department_grade, department_staff, department_parent, department_number, department_staffs
+        from department
+        <where>
+            <if test="companyId != null and companyId != ''">
+                and company_id = #{companyId}
+            </if>
+            <if test="departmentId != null and departmentId != ''">
+                and department_id = #{departmentId}
+            </if>
+            <if test="departmentName != null and departmentName != ''">
+                and department_name = #{departmentName}
+            </if>
+            <if test="departmentGrade != null and departmentGrade != ''">
+                and department_grade = #{departmentGrade}
+            </if>
+            <if test="departmentStaff != null and departmentStaff != ''">
+                and department_staff = #{departmentStaff}
+            </if>
+            <if test="departmentParent != null and departmentParent != ''">
+                and department_parent = #{departmentParent}
+            </if>
+            <if test="departmentNumber != null">
+                and department_number = #{departmentNumber}
+            </if>
+            <if test="departmentStaffs != null and departmentStaffs != ''">
+                and department_staffs = #{departmentStaffs}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from department
+        <where>
+            <if test="companyId != null and companyId != ''">
+                and company_id = #{companyId}
+            </if>
+            <if test="departmentId != null and departmentId != ''">
+                and department_id = #{departmentId}
+            </if>
+            <if test="departmentName != null and departmentName != ''">
+                and department_name = #{departmentName}
+            </if>
+            <if test="departmentGrade != null and departmentGrade != ''">
+                and department_grade = #{departmentGrade}
+            </if>
+            <if test="departmentStaff != null and departmentStaff != ''">
+                and department_staff = #{departmentStaff}
+            </if>
+            <if test="departmentParent != null and departmentParent != ''">
+                and department_parent = #{departmentParent}
+            </if>
+            <if test="departmentNumber != null">
+                and department_number = #{departmentNumber}
+            </if>
+            <if test="departmentStaffs != null and departmentStaffs != ''">
+                and department_staffs = #{departmentStaffs}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="companyId" useGeneratedKeys="true">
+        insert into department(department_id, department_name, department_grade, department_staff, department_parent, department_number, department_staffs)
+        values (#{departmentId}, #{departmentName}, #{departmentGrade}, #{departmentStaff}, #{departmentParent}, #{departmentNumber}, #{departmentStaffs})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="companyId" useGeneratedKeys="true">
+        insert into department(department_id, department_name, department_grade, department_staff, department_parent, department_number, department_staffs)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.departmentId}, #{entity.departmentName}, #{entity.departmentGrade}, #{entity.departmentStaff}, #{entity.departmentParent}, #{entity.departmentNumber}, #{entity.departmentStaffs})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="companyId" useGeneratedKeys="true">
+        insert into department(department_id, department_name, department_grade, department_staff, department_parent, department_number, department_staffs)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.departmentId}, #{entity.departmentName}, #{entity.departmentGrade}, #{entity.departmentStaff}, #{entity.departmentParent}, #{entity.departmentNumber}, #{entity.departmentStaffs})
+        </foreach>
+        on duplicate key update
+        department_id = values(department_id),
+        department_name = values(department_name),
+        department_grade = values(department_grade),
+        department_staff = values(department_staff),
+        department_parent = values(department_parent),
+        department_number = values(department_number),
+        department_staffs = values(department_staffs)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update department
+        <set>
+            <if test="departmentId != null and departmentId != ''">
+                department_id = #{departmentId},
+            </if>
+            <if test="departmentName != null and departmentName != ''">
+                department_name = #{departmentName},
+            </if>
+            <if test="departmentGrade != null and departmentGrade != ''">
+                department_grade = #{departmentGrade},
+            </if>
+            <if test="departmentStaff != null and departmentStaff != ''">
+                department_staff = #{departmentStaff},
+            </if>
+            <if test="departmentParent != null and departmentParent != ''">
+                department_parent = #{departmentParent},
+            </if>
+            <if test="departmentNumber != null">
+                department_number = #{departmentNumber},
+            </if>
+            <if test="departmentStaffs != null and departmentStaffs != ''">
+                department_staffs = #{departmentStaffs},
+            </if>
+        </set>
+        where company_id = #{companyId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from department where company_id = #{companyId}
+    </delete>
+
+</mapper>
+

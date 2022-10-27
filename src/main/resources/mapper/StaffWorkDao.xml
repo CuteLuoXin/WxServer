@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.loveback.crm.dao.StaffWorkDao">
+
+    <resultMap type="cn.com.loveback.crm.entity.StaffWork" id="StaffWorkMap">
+        <result property="staffId" column="staff_id" jdbcType="INTEGER"/>
+        <result property="staffName" column="staff_name" jdbcType="VARCHAR"/>
+        <result property="mondayWork" column="Monday_work" jdbcType="VARCHAR"/>
+        <result property="tuesdayWork" column="Tuesday_work" jdbcType="VARCHAR"/>
+        <result property="wednesdayWork" column="Wednesday_work" jdbcType="VARCHAR"/>
+        <result property="thursdayWork" column="Thursday_work" jdbcType="VARCHAR"/>
+        <result property="fridayWork" column="Friday_work" jdbcType="VARCHAR"/>
+        <result property="saturdayWork" column="Saturday_work" jdbcType="VARCHAR"/>
+        <result property="sundayWork" column="Sunday_work" jdbcType="VARCHAR"/>
+        <result property="mondayDate" column="Monday_date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="StaffWorkMap">
+        select
+          staff_id, staff_name, Monday_work, Tuesday_work, Wednesday_work, Thursday_work, Friday_work, Saturday_work, Sunday_work, Monday_date
+        from staff_work
+        where staff_id = #{staffId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="StaffWorkMap">
+        select
+          staff_id, staff_name, Monday_work, Tuesday_work, Wednesday_work, Thursday_work, Friday_work, Saturday_work, Sunday_work, Monday_date
+        from staff_work
+        <where>
+            <if test="staffId != null">
+                and staff_id = #{staffId}
+            </if>
+            <if test="staffName != null and staffName != ''">
+                and staff_name = #{staffName}
+            </if>
+            <if test="mondayWork != null and mondayWork != ''">
+                and Monday_work = #{mondayWork}
+            </if>
+            <if test="tuesdayWork != null and tuesdayWork != ''">
+                and Tuesday_work = #{tuesdayWork}
+            </if>
+            <if test="wednesdayWork != null and wednesdayWork != ''">
+                and Wednesday_work = #{wednesdayWork}
+            </if>
+            <if test="thursdayWork != null and thursdayWork != ''">
+                and Thursday_work = #{thursdayWork}
+            </if>
+            <if test="fridayWork != null and fridayWork != ''">
+                and Friday_work = #{fridayWork}
+            </if>
+            <if test="saturdayWork != null and saturdayWork != ''">
+                and Saturday_work = #{saturdayWork}
+            </if>
+            <if test="sundayWork != null and sundayWork != ''">
+                and Sunday_work = #{sundayWork}
+            </if>
+            <if test="mondayDate != null">
+                and Monday_date = #{mondayDate}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from staff_work
+        <where>
+            <if test="staffId != null">
+                and staff_id = #{staffId}
+            </if>
+            <if test="staffName != null and staffName != ''">
+                and staff_name = #{staffName}
+            </if>
+            <if test="mondayWork != null and mondayWork != ''">
+                and Monday_work = #{mondayWork}
+            </if>
+            <if test="tuesdayWork != null and tuesdayWork != ''">
+                and Tuesday_work = #{tuesdayWork}
+            </if>
+            <if test="wednesdayWork != null and wednesdayWork != ''">
+                and Wednesday_work = #{wednesdayWork}
+            </if>
+            <if test="thursdayWork != null and thursdayWork != ''">
+                and Thursday_work = #{thursdayWork}
+            </if>
+            <if test="fridayWork != null and fridayWork != ''">
+                and Friday_work = #{fridayWork}
+            </if>
+            <if test="saturdayWork != null and saturdayWork != ''">
+                and Saturday_work = #{saturdayWork}
+            </if>
+            <if test="sundayWork != null and sundayWork != ''">
+                and Sunday_work = #{sundayWork}
+            </if>
+            <if test="mondayDate != null">
+                and Monday_date = #{mondayDate}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="staffId" useGeneratedKeys="true">
+        insert into staff_work(staff_name, Monday_work, Tuesday_work, Wednesday_work, Thursday_work, Friday_work, Saturday_work, Sunday_work, Monday_date)
+        values (#{staffName}, #{mondayWork}, #{tuesdayWork}, #{wednesdayWork}, #{thursdayWork}, #{fridayWork}, #{saturdayWork}, #{sundayWork}, #{mondayDate})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="staffId" useGeneratedKeys="true">
+        insert into staff_work(staff_name, Monday_work, Tuesday_work, Wednesday_work, Thursday_work, Friday_work, Saturday_work, Sunday_work, Monday_date)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.staffName}, #{entity.mondayWork}, #{entity.tuesdayWork}, #{entity.wednesdayWork}, #{entity.thursdayWork}, #{entity.fridayWork}, #{entity.saturdayWork}, #{entity.sundayWork}, #{entity.mondayDate})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="staffId" useGeneratedKeys="true">
+        insert into staff_work(staff_name, Monday_work, Tuesday_work, Wednesday_work, Thursday_work, Friday_work, Saturday_work, Sunday_work, Monday_date)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.staffName}, #{entity.mondayWork}, #{entity.tuesdayWork}, #{entity.wednesdayWork}, #{entity.thursdayWork}, #{entity.fridayWork}, #{entity.saturdayWork}, #{entity.sundayWork}, #{entity.mondayDate})
+        </foreach>
+        on duplicate key update
+        staff_name = values(staff_name),
+        Monday_work = values(Monday_work),
+        Tuesday_work = values(Tuesday_work),
+        Wednesday_work = values(Wednesday_work),
+        Thursday_work = values(Thursday_work),
+        Friday_work = values(Friday_work),
+        Saturday_work = values(Saturday_work),
+        Sunday_work = values(Sunday_work),
+        Monday_date = values(Monday_date)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update staff_work
+        <set>
+            <if test="staffName != null and staffName != ''">
+                staff_name = #{staffName},
+            </if>
+            <if test="mondayWork != null and mondayWork != ''">
+                Monday_work = #{mondayWork},
+            </if>
+            <if test="tuesdayWork != null and tuesdayWork != ''">
+                Tuesday_work = #{tuesdayWork},
+            </if>
+            <if test="wednesdayWork != null and wednesdayWork != ''">
+                Wednesday_work = #{wednesdayWork},
+            </if>
+            <if test="thursdayWork != null and thursdayWork != ''">
+                Thursday_work = #{thursdayWork},
+            </if>
+            <if test="fridayWork != null and fridayWork != ''">
+                Friday_work = #{fridayWork},
+            </if>
+            <if test="saturdayWork != null and saturdayWork != ''">
+                Saturday_work = #{saturdayWork},
+            </if>
+            <if test="sundayWork != null and sundayWork != ''">
+                Sunday_work = #{sundayWork},
+            </if>
+            <if test="mondayDate != null">
+                Monday_date = #{mondayDate},
+            </if>
+        </set>
+        where staff_id = #{staffId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from staff_work where staff_id = #{staffId}
+    </delete>
+
+</mapper>
+
